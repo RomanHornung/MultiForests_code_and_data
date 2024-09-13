@@ -37,9 +37,9 @@ rownames(resultsall) <- 1:nrow(resultsall)
 
 
 resultsall$method_all <- factor(resultsall$method_all, levels=c("perm", "gini_corr", "bin_wgini_wsquared", "bin_wgini_wosquared", "bin_wogini_wsquared",
-                                                  "bin_wogini_wosquared", "muw_wgini_wsquared", "muw_wgini_wosquared", "muw_wogini_wsquared", 
-                                                  "muw_wogini_wosquared", "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", 
-                                                  "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared"))
+                                                                "bin_wogini_wosquared", "muw_wgini_wsquared", "muw_wgini_wosquared", "muw_wogini_wsquared", 
+                                                                "muw_wogini_wosquared", "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", 
+                                                                "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared"))
 
 
 
@@ -499,7 +499,8 @@ resultsK10_vsnoise <- resultstemp %>%
                                  "multi-class VIM (wosquared_wogini)" = "muw_wogini_wosquared"
   ))
 
-prepare_and_save_latex(resultsK10_vsnoise, "../tables/TabS3.tex", table_title = "Influential vs noise variables, C = 10")
+prepare_and_save_latex(resultsK10_vsnoise, "../tables/TabS3.tex", table_title =
+                         "Influential vs noise variables, C = 10")
 
 
 
@@ -650,7 +651,8 @@ resultstemp$K <- NULL
 
 # Compute AUC for specified groups and aggregate results
 resultsK4_vstwo_gr <- resultstemp %>%
-  filter(!(method_all %in% c("bin_wgini_wsquared", "bin_wgini_wosquared", "bin_wogini_wsquared", "bin_wogini_wosquared"))) %>%
+  filter(!(method_all %in% c("bin_wgini_wsquared", "bin_wgini_wosquared", 
+                             "bin_wogini_wsquared", "bin_wogini_wosquared"))) %>%
   group_by(n, method_all, itind) %>%
   summarise(
     auc_1 = auroc(vim[c(51:53, 54:56)], c(rep(FALSE, 3), rep(TRUE, 3))),
@@ -705,9 +707,13 @@ p <- ggplot(results_long, aes(x = cl_as, y = value, group = method_all, color = 
         legend.title = element_text(size=14),
         legend.text = element_text(size=14)) + 
   labs(color="Method", shape="Method", linetype="Type", y="AUC") +
-  scale_linetype_manual(values = c("conventional" = "solid", "multi-class diff." = "dashed", "multi-class" = "dotdash")) +
-  scale_shape_manual(values=c("wsquared_wgini" = 1, "wosquared_wgini" = 2, "wsquared_wogini" = 3, "wosquared_wogini" = 4, "perm" = 5, "gini_corr" = 6)) +
-  scale_x_discrete(labels = c("cl_as_1" = expression(X[cl_as[1]]), "cl_as_2" = expression(X[cl_as[2]]), "cl_as_3" = expression(X[cl_as[3]]), "cl_as_4" = expression(X[cl_as[4]]))) +
+  scale_linetype_manual(values = c("conventional" = "solid", "multi-class diff." = 
+                                     "dashed", "multi-class" = "dotdash")) +
+  scale_shape_manual(values=c("wsquared_wgini" = 1, "wosquared_wgini" = 2, "wsquared_wogini" = 3, 
+                              "wosquared_wogini" = 4, "perm" = 5, "gini_corr" = 6)) +
+  scale_x_discrete(labels = c("cl_as_1" = expression(X[cl_as[1]]), "cl_as_2" = 
+                                expression(X[cl_as[2]]), "cl_as_3" = expression(X[cl_as[3]]), 
+                              "cl_as_4" = expression(X[cl_as[4]]))) +
   theme(legend.position = "right") +
   facet_wrap(~ n) +  # Add facet_wrap for separate plots by "n"
   guides(color = guide_legend(order = 1),
@@ -718,7 +724,7 @@ p
 
 # Figure 2:
 
-ggsave("../figures/Fig2.pdf", width=10, height=6)
+ggsave("../figures/Fig2.eps", width=10, height=6)
 
 
 
@@ -736,7 +742,8 @@ resultstemp$K <- NULL
 
 # Compute AUC for specified groups and aggregate results
 resultsK6_vstwo_gr <- resultstemp %>%
-  filter(!(method_all %in% c("bin_wgini_wsquared", "bin_wgini_wosquared", "bin_wogini_wsquared", "bin_wogini_wosquared"))) %>%
+  filter(!(method_all %in% c("bin_wgini_wsquared", "bin_wgini_wosquared", 
+                             "bin_wogini_wsquared", "bin_wogini_wosquared"))) %>%
   group_by(n, method_all, itind) %>%
   summarise(
     auc_1 = auroc(vim[c(51:53, 57:59)], c(rep(FALSE, 3), rep(TRUE, 3))),
@@ -776,7 +783,8 @@ results_long <- results_long %>%
     method_all == "perm" ~ "perm",
     method_all == "gini_corr" ~ "gini_corr"
   ),
-  method = factor(method, levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini", "perm", "gini_corr")))
+  method = factor(method, levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", 
+                                   "wosquared_wogini", "perm", "gini_corr")))
 
 p1 <- ggplot(results_long, aes(x = cl_as, y = value, group = method_all, color = method, linetype = type)) +
   geom_line() +
@@ -789,9 +797,12 @@ p1 <- ggplot(results_long, aes(x = cl_as, y = value, group = method_all, color =
         plot.title = element_text(size = 16)
   ) + 
   ylab("AUC") +
-  scale_linetype_manual(values = c("conventional" = "solid", "multi-class diff." = "dashed", "multi-class" = "dotdash")) +
-  scale_shape_manual(values=c("wsquared_wgini" = 1, "wosquared_wgini" = 2, "wsquared_wogini" = 3, "wosquared_wogini" = 4, "perm" = 5, "gini_corr" = 6)) +
-  scale_x_discrete(labels = c("cl_as_1" = expression(X[cl_as[1]]), "cl_as_2" = expression(X[cl_as[2]]), "cl_as_3" = expression(X[cl_as[3]]), "cl_as_4" = expression(X[cl_as[4]]))) +
+  scale_linetype_manual(values = c("conventional" = "solid", "multi-class diff." = "dashed", 
+                                   "multi-class" = "dotdash")) +
+  scale_shape_manual(values=c("wsquared_wgini" = 1, "wosquared_wgini" = 2, "wsquared_wogini" = 3, 
+                              "wosquared_wogini" = 4, "perm" = 5, "gini_corr" = 6)) +
+  scale_x_discrete(labels = c("cl_as_1" = expression(X[cl_as[1]]), "cl_as_2" = expression(X[cl_as[2]]), 
+                              "cl_as_3" = expression(X[cl_as[3]]), "cl_as_4" = expression(X[cl_as[4]]))) +
   theme(legend.position = "none") +
   ggtitle(expression("Comparison with" ~ X[two_gr])) + 
   facet_wrap(~ n)  # Add facet_wrap for separate plots by "n"
@@ -801,7 +812,8 @@ p1 <- ggplot(results_long, aes(x = cl_as, y = value, group = method_all, color =
 
 # Compute AUC for specified groups and aggregate results
 resultsK6_vsthr_gr <- resultstemp %>%
-  filter(!(method_all %in% c("bin_wgini_wsquared", "bin_wgini_wosquared", "bin_wogini_wsquared", "bin_wogini_wosquared"))) %>%
+  filter(!(method_all %in% c("bin_wgini_wsquared", "bin_wgini_wosquared", 
+                             "bin_wogini_wsquared", "bin_wogini_wosquared"))) %>%
   group_by(n, method_all, itind) %>%
   summarise(
     auc_1 = auroc(vim[c(54:56, 57:59)], c(rep(FALSE, 3), rep(TRUE, 3))),
@@ -841,7 +853,8 @@ results_long <- results_long %>%
     method_all == "perm" ~ "perm",
     method_all == "gini_corr" ~ "gini_corr"
   ),
-  method = factor(method, levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini", "perm", "gini_corr")))
+  method = factor(method, levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", 
+                                   "wosquared_wogini", "perm", "gini_corr")))
 
 p2 <- ggplot(results_long, aes(x = cl_as, y = value, group = method_all, color = method, linetype = type)) +
   geom_point(aes(shape = method), size=2.5) +
@@ -856,9 +869,13 @@ p2 <- ggplot(results_long, aes(x = cl_as, y = value, group = method_all, color =
         plot.title = element_text(size = 16)
   ) + 
   labs(color="Method", shape="Method", linetype="Type", y="AUC") +
-  scale_shape_manual(values=c("wsquared_wgini" = 1, "wosquared_wgini" = 2, "wsquared_wogini" = 3, "wosquared_wogini" = 4, "perm" = 5, "gini_corr" = 6)) +
-  scale_linetype_manual(values = c("conventional" = "solid", "multi-class diff." = "dashed", "multi-class" = "dotdash")) +
-  scale_x_discrete(labels = c("cl_as_1" = expression(X[cl_as[1]]), "cl_as_2" = expression(X[cl_as[2]]), "cl_as_3" = expression(X[cl_as[3]]), "cl_as_4" = expression(X[cl_as[4]]))) +
+  scale_shape_manual(values=c("wsquared_wgini" = 1, "wosquared_wgini" = 2, "wsquared_wogini" = 3, 
+                              "wosquared_wogini" = 4, "perm" = 5, "gini_corr" = 6)) +
+  scale_linetype_manual(values = c("conventional" = "solid", "multi-class diff." = "dashed", 
+                                   "multi-class" = "dotdash")) +
+  scale_x_discrete(labels = c("cl_as_1" = expression(X[cl_as[1]]), "cl_as_2" = 
+                                expression(X[cl_as[2]]), "cl_as_3" = expression(X[cl_as[3]]), 
+                              "cl_as_4" = expression(X[cl_as[4]]))) +
   theme(legend.position = "right") +
   ggtitle(expression("Comparison with" ~ X[thr_gr])) + 
   facet_wrap(~ n) + # Add facet_wrap for separate plots by "n"
@@ -876,7 +893,7 @@ grid_plot <- arrangeGrob(p1, nullGrob(), p2, ncol = 3, widths = c(2, 0.1, 2.83))
 
 # Figure 3:
 
-ggsave("../figures/Fig3.pdf", grid_plot, width=14, height=5.5)
+ggsave("../figures/Fig3.eps", grid_plot, width=14, height=5.5)
 
 
 
@@ -895,7 +912,8 @@ resultstemp$K <- NULL
 
 # Compute AUC for specified groups and aggregate results
 resultsK10_vstwo_gr <- resultstemp %>%
-  filter(!(method_all %in% c("bin_wgini_wsquared", "bin_wgini_wosquared", "bin_wogini_wsquared", "bin_wogini_wosquared"))) %>%
+  filter(!(method_all %in% c("bin_wgini_wsquared", "bin_wgini_wosquared", 
+                             "bin_wogini_wsquared", "bin_wogini_wosquared"))) %>%
   group_by(n, method_all, itind) %>%
   summarise(
     auc_1 = auroc(vim[c(51:53, 57:59)], c(rep(FALSE, 3), rep(TRUE, 3))),
@@ -937,7 +955,8 @@ results_long <- results_long %>%
     method_all == "perm" ~ "perm",
     method_all == "gini_corr" ~ "gini_corr"
   ),
-  method = factor(method, levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini", "perm", "gini_corr")))
+  method = factor(method, levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", 
+                                   "wosquared_wogini", "perm", "gini_corr")))
 
 p1 <- ggplot(results_long, aes(x = cl_as, y = value, group = method_all, color = method, linetype = type)) +
   geom_line() +
@@ -950,9 +969,13 @@ p1 <- ggplot(results_long, aes(x = cl_as, y = value, group = method_all, color =
         plot.title = element_text(size = 16)
   ) +
   ylab("AUC") +
-  scale_linetype_manual(values = c("conventional" = "solid", "multi-class diff." = "dashed", "multi-class" = "dotdash")) +
-  scale_shape_manual(values=c("wsquared_wgini" = 1, "wosquared_wgini" = 2, "wsquared_wogini" = 3, "wosquared_wogini" = 4, "perm" = 5, "gini_corr" = 6)) +
-  scale_x_discrete(labels = c("cl_as_1" = expression(X[cl_as[1]]), "cl_as_2" = expression(X[cl_as[2]]), "cl_as_3" = expression(X[cl_as[3]]), "cl_as_4" = expression(X[cl_as[4]]))) +
+  scale_linetype_manual(values = c("conventional" = "solid", "multi-class diff." = 
+                                     "dashed", "multi-class" = "dotdash")) +
+  scale_shape_manual(values=c("wsquared_wgini" = 1, "wosquared_wgini" = 2, "wsquared_wogini" = 3, 
+                              "wosquared_wogini" = 4, "perm" = 5, "gini_corr" = 6)) +
+  scale_x_discrete(labels = c("cl_as_1" = expression(X[cl_as[1]]), "cl_as_2" = 
+                                expression(X[cl_as[2]]), "cl_as_3" = expression(X[cl_as[3]]), 
+                              "cl_as_4" = expression(X[cl_as[4]]))) +
   theme(legend.position = "none") +
   ggtitle(expression("Comparison with" ~ X[two_gr])) + 
   facet_wrap(~ n)  # Add facet_wrap for separate plots by "n"
@@ -1004,7 +1027,8 @@ results_long <- results_long %>%
     method_all == "perm" ~ "perm",
     method_all == "gini_corr" ~ "gini_corr"
   ),
-  method = factor(method, levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini", "perm", "gini_corr")))
+  method = factor(method, levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", 
+                                   "wosquared_wogini", "perm", "gini_corr")))
 
 p2 <- ggplot(results_long, aes(x = cl_as, y = value, group = method_all, color = method, linetype = type)) +
   geom_line() +
@@ -1019,9 +1043,12 @@ p2 <- ggplot(results_long, aes(x = cl_as, y = value, group = method_all, color =
         plot.title = element_text(size = 16)
   ) +
   labs(color="Method", shape="Method", linetype="Type", y="AUC") +
-  scale_linetype_manual(values = c("conventional" = "solid", "multi-class diff." = "dashed", "multi-class" = "dotdash")) +
-  scale_shape_manual(values=c("wsquared_wgini" = 1, "wosquared_wgini" = 2, "wsquared_wogini" = 3, "wosquared_wogini" = 4, "perm" = 5, "gini_corr" = 6)) +
-  scale_x_discrete(labels = c("cl_as_1" = expression(X[cl_as[1]]), "cl_as_2" = expression(X[cl_as[2]]), "cl_as_3" = expression(X[cl_as[3]]), "cl_as_4" = expression(X[cl_as[4]]))) +
+  scale_linetype_manual(values = c("conventional" = "solid", "multi-class diff." = "dashed", 
+                                   "multi-class" = "dotdash")) +
+  scale_shape_manual(values=c("wsquared_wgini" = 1, "wosquared_wgini" = 2, "wsquared_wogini" = 3, 
+                              "wosquared_wogini" = 4, "perm" = 5, "gini_corr" = 6)) +
+  scale_x_discrete(labels = c("cl_as_1" = expression(X[cl_as[1]]), "cl_as_2" = expression(X[cl_as[2]]), 
+                              "cl_as_3" = expression(X[cl_as[3]]), "cl_as_4" = expression(X[cl_as[4]]))) +
   theme(legend.position = "right") +
   ggtitle(expression("Comparison with" ~ X[thr_gr])) + 
   facet_wrap(~ n) + # Add facet_wrap for separate plots by "n"
@@ -1035,7 +1062,7 @@ grid_plot <- arrangeGrob(p1, nullGrob(), p2, ncol = 3, widths = c(2, 0.1, 2.83))
 
 # Figure 4:
 
-ggsave("../figures/Fig4.pdf", grid_plot, width=15, height=5.5)
+ggsave("../figures/Fig4.eps", grid_plot, width=15, height=5.5)
 
 
 
@@ -1067,7 +1094,10 @@ resultstemp <- resultsall %>%
   filter(K == Ktemp) %>%
   select(-K)
 
-resi <- resultstemp %>% filter(n=="n = 100", !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
+resi <- resultstemp %>% filter(n=="n = 100", 
+                               !(method_all %in% c("perm", "gini_corr", 
+                                                   "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", 
+                                                   "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
 
 resi <- resi %>% mutate(method = case_when(method_all %in% c("muw_wgini_wsquared", "bin_wgini_wsquared") ~ "wsquared_wgini",
                                            method_all %in% c("muw_wgini_wosquared", "bin_wgini_wosquared") ~ "wosquared_wgini",
@@ -1087,7 +1117,8 @@ resi <- resi %>% filter(!(seq %in% c(1:45)))
 
 
 resi2 <- data.frame(
-  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=5), levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
+  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=5), 
+                  levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
   xpos = rep(c(2.75, 7, 10, 13, 16), times=4),
   labels = rep(c("X[no]", "X[two_gr]", "X[cl_as[1]]", "X[cl_as[2]]", "X[cl_as[3]]"), times=4)
 )
@@ -1110,7 +1141,7 @@ p <- ggplot(resi, aes(x = factor(seq), y = vim)) + facet_wrap(~ method, scales="
   geom_boxplot(aes(fill = type), position = position_dodge(width = 0.75)) + 
   theme_bw() +
   labs(fill="VIM type",
-        x = "Covariates",
+       x = "Covariates",
        y = "VIM values") +
   scale_fill_manual(values=colors, labels = c("discriminatory", "multi-class")) +
   geom_vline(xintercept = c(5.5, 8.5, 11.5, 14.5)) +
@@ -1130,7 +1161,7 @@ p
 
 # Figure S2:
 
-ggsave("../figures/FigS2.pdf", width = 12, height = 6)
+ggsave("../figures/FigS2.eps", width = 12, height = 6)
 
 
 
@@ -1144,7 +1175,10 @@ resultstemp <- resultsall %>%
   filter(K == Ktemp) %>%
   select(-K)
 
-resi <- resultstemp %>% filter(n=="n = 500", !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
+resi <- resultstemp %>% filter(n=="n = 500", 
+                               !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared",
+                                                   "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", 
+                                                   "muw_m_bin_wogini_wosquared")))
 
 resi <- resi %>% mutate(method = case_when(method_all %in% c("muw_wgini_wsquared", "bin_wgini_wsquared") ~ "wsquared_wgini",
                                            method_all %in% c("muw_wgini_wosquared", "bin_wgini_wosquared") ~ "wosquared_wgini",
@@ -1164,7 +1198,8 @@ resi <- resi %>% filter(!(seq %in% c(1:45)))
 
 
 resi2 <- data.frame(
-  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=5), levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
+  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=5), 
+                  levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
   xpos = rep(c(2.75, 7, 10, 13, 16), times=4),
   labels = rep(c("X[no]", "X[two_gr]", "X[cl_as[1]]", "X[cl_as[2]]", "X[cl_as[3]]"), times=4)
 )
@@ -1205,7 +1240,7 @@ p
 
 # Figure S3:
 
-ggsave("../figures/FigS3.pdf", width = 12, height = 6)
+ggsave("../figures/FigS3.eps", width = 12, height = 6)
 
 
 
@@ -1219,7 +1254,10 @@ resultstemp <- resultsall %>%
   filter(K == Ktemp) %>%
   select(-K)
 
-resi <- resultstemp %>% filter(n=="n = 1000", !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
+resi <- resultstemp %>% filter(n=="n = 1000", 
+                               !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", 
+                                                   "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", 
+                                                   "muw_m_bin_wogini_wosquared")))
 
 resi <- resi %>% mutate(method = case_when(method_all %in% c("muw_wgini_wsquared", "bin_wgini_wsquared") ~ "wsquared_wgini",
                                            method_all %in% c("muw_wgini_wosquared", "bin_wgini_wosquared") ~ "wosquared_wgini",
@@ -1239,7 +1277,8 @@ resi <- resi %>% filter(!(seq %in% c(1:45)))
 
 
 resi2 <- data.frame(
-  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=5), levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
+  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=5), 
+                  levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
   xpos = rep(c(2.75, 7, 10, 13, 16), times=4),
   labels = rep(c("X[no]", "X[two_gr]", "X[cl_as[1]]", "X[cl_as[2]]", "X[cl_as[3]]"), times=4)
 )
@@ -1280,7 +1319,7 @@ p
 
 # Figure S4:
 
-ggsave("../figures/FigS4.pdf", width = 12, height = 6)
+ggsave("../figures/FigS4.eps", width = 12, height = 6)
 
 
 
@@ -1294,7 +1333,9 @@ resultstemp <- resultsall %>%
   filter(K == Ktemp) %>%
   select(-K)
 
-resi <- resultstemp %>% filter(n=="n = 2000", !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
+resi <- resultstemp %>% filter(n=="n = 2000", !(method_all %in% c("perm", "gini_corr",
+                                                                  "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared",
+                                                                  "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
 
 resi <- resi %>% mutate(method = case_when(method_all %in% c("muw_wgini_wsquared", "bin_wgini_wsquared") ~ "wsquared_wgini",
                                            method_all %in% c("muw_wgini_wosquared", "bin_wgini_wosquared") ~ "wosquared_wgini",
@@ -1314,7 +1355,8 @@ resi <- resi %>% filter(!(seq %in% c(1:45)))
 
 
 resi2 <- data.frame(
-  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=5), levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
+  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=5), 
+                  levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
   xpos = rep(c(2.75, 7, 10, 13, 16), times=4),
   labels = rep(c("X[no]", "X[two_gr]", "X[cl_as[1]]", "X[cl_as[2]]", "X[cl_as[3]]"), times=4)
 )
@@ -1355,7 +1397,7 @@ p
 
 # Figure S5:
 
-ggsave("../figures/FigS5.pdf", width = 12, height = 6)
+ggsave("../figures/FigS5.eps", width = 12, height = 6)
 
 
 
@@ -1377,7 +1419,10 @@ resultstemp <- resultsall %>%
   filter(K == Ktemp) %>%
   select(-K)
 
-resi <- resultstemp %>% filter(n=="n = 100", !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
+resi <- resultstemp %>% filter(n=="n = 100", 
+                               !(method_all %in% c("perm", "gini_corr", 
+                                                   "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", 
+                                                   "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
 
 resi <- resi %>% mutate(method = case_when(method_all %in% c("muw_wgini_wsquared", "bin_wgini_wsquared") ~ "wsquared_wgini",
                                            method_all %in% c("muw_wgini_wosquared", "bin_wgini_wosquared") ~ "wosquared_wgini",
@@ -1397,7 +1442,8 @@ resi <- resi %>% filter(!(seq %in% c(1:45)))
 
 
 resi2 <- data.frame(
-  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=6), levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
+  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=6), 
+                  levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
   xpos = rep(c(2.75, 7, 10, 13, 16, 19), times=4),
   labels = rep(c("X[no]", "X[two_gr]", "X[thr_gr]", "X[cl_as[1]]", "X[cl_as[2]]", "X[cl_as[3]]"), times=4)
 )
@@ -1441,7 +1487,7 @@ p
 
 # Figure S6:
 
-ggsave("../figures/FigS6.pdf", width = 12, height = 6)
+ggsave("../figures/FigS6.eps", width = 12, height = 6)
 
 
 
@@ -1458,7 +1504,9 @@ resultstemp <- resultsall %>%
   filter(K == Ktemp) %>%
   select(-K)
 
-resi <- resultstemp %>% filter(n=="n = 500", !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
+resi <- resultstemp %>% filter(n=="n = 500", !(method_all %in% c("perm", "gini_corr", 
+                                                                 "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", 
+                                                                 "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
 
 resi <- resi %>% mutate(method = case_when(method_all %in% c("muw_wgini_wsquared", "bin_wgini_wsquared") ~ "wsquared_wgini",
                                            method_all %in% c("muw_wgini_wosquared", "bin_wgini_wosquared") ~ "wosquared_wgini",
@@ -1478,7 +1526,8 @@ resi <- resi %>% filter(!(seq %in% c(1:45)))
 
 
 resi2 <- data.frame(
-  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=6), levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
+  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=6), 
+                  levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
   xpos = rep(c(2.75, 7, 10, 13, 16, 19), times=4),
   labels = rep(c("X[no]", "X[two_gr]", "X[thr_gr]", "X[cl_as[1]]", "X[cl_as[2]]", "X[cl_as[3]]"), times=4)
 )
@@ -1521,7 +1570,7 @@ p
 
 # Figure S7:
 
-ggsave("../figures/FigS7.pdf", width = 12, height = 6)
+ggsave("../figures/FigS7.eps", width = 12, height = 6)
 
 
 
@@ -1537,7 +1586,10 @@ resultstemp <- resultsall %>%
   filter(K == Ktemp) %>%
   select(-K)
 
-resi <- resultstemp %>% filter(n=="n = 1000", !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
+resi <- resultstemp %>% filter(n=="n = 1000", 
+                               !(method_all %in% c("perm", "gini_corr", 
+                                                   "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", 
+                                                   "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
 
 resi <- resi %>% mutate(method = case_when(method_all %in% c("muw_wgini_wsquared", "bin_wgini_wsquared") ~ "wsquared_wgini",
                                            method_all %in% c("muw_wgini_wosquared", "bin_wgini_wosquared") ~ "wosquared_wgini",
@@ -1557,7 +1609,8 @@ resi <- resi %>% filter(!(seq %in% c(1:45)))
 
 
 resi2 <- data.frame(
-  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=6), levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
+  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=6), 
+                  levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
   xpos = rep(c(2.75, 7, 10, 13, 16, 19), times=4),
   labels = rep(c("X[no]", "X[two_gr]", "X[thr_gr]", "X[cl_as[1]]", "X[cl_as[2]]", "X[cl_as[3]]"), times=4)
 )
@@ -1598,7 +1651,7 @@ p
 
 # Figure S8:
 
-ggsave("../figures/FigS8.pdf", width = 12, height = 6)
+ggsave("../figures/FigS8.eps", width = 12, height = 6)
 
 
 
@@ -1613,7 +1666,10 @@ resultstemp <- resultsall %>%
   filter(K == Ktemp) %>%
   select(-K)
 
-resi <- resultstemp %>% filter(n=="n = 2000", !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
+resi <- resultstemp %>% filter(n=="n = 2000", 
+                               !(method_all %in% c("perm", "gini_corr", 
+                                                   "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", 
+                                                   "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
 
 resi <- resi %>% mutate(method = case_when(method_all %in% c("muw_wgini_wsquared", "bin_wgini_wsquared") ~ "wsquared_wgini",
                                            method_all %in% c("muw_wgini_wosquared", "bin_wgini_wosquared") ~ "wosquared_wgini",
@@ -1633,7 +1689,8 @@ resi <- resi %>% filter(!(seq %in% c(1:45)))
 
 
 resi2 <- data.frame(
-  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=6), levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
+  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=6), 
+                  levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
   xpos = rep(c(2.75, 7, 10, 13, 16, 19), times=4),
   labels = rep(c("X[no]", "X[two_gr]", "X[thr_gr]", "X[cl_as[1]]", "X[cl_as[2]]", "X[cl_as[3]]"), times=4)
 )
@@ -1674,7 +1731,7 @@ p
 
 # Figure S9:
 
-ggsave("../figures/FigS9.pdf", width = 12, height = 6)
+ggsave("../figures/FigS9.eps", width = 12, height = 6)
 
 
 
@@ -1696,7 +1753,10 @@ resultstemp <- resultsall %>%
   filter(K == Ktemp) %>%
   select(-K)
 
-resi <- resultstemp %>% filter(n=="n = 100", !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
+resi <- resultstemp %>% filter(n=="n = 100", 
+                               !(method_all %in% c("perm", "gini_corr", 
+                                                   "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", 
+                                                   "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
 
 resi <- resi %>% mutate(method = case_when(method_all %in% c("muw_wgini_wsquared", "bin_wgini_wsquared") ~ "wsquared_wgini",
                                            method_all %in% c("muw_wgini_wosquared", "bin_wgini_wosquared") ~ "wosquared_wgini",
@@ -1716,9 +1776,12 @@ resi <- resi %>% filter(!(seq %in% c(1:45)))
 
 
 resi2 <- data.frame(
-  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=7), levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
+  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", 
+                        "wosquared_wogini"), each=7), 
+                  levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
   xpos = rep(c(2.75, 7, 10, 13, 16, 19, 22), times=4),
-  labels = rep(c("X[no]", "X[two_gr]", "X[thr_gr]", "X[cl_as[1]]", "X[cl_as[2]]", "X[cl_as[3]]", "X[cl_as[4]]"), times=4)
+  labels = rep(c("X[no]", "X[two_gr]", "X[thr_gr]", "X[cl_as[1]]", "X[cl_as[2]]", 
+                 "X[cl_as[3]]", "X[cl_as[4]]"), times=4)
 )
 
 # Calculate the minimum y-value for each method group and determine the y-position for labels
@@ -1760,7 +1823,7 @@ p
 
 # Figure S10:
 
-ggsave("../figures/FigS10.pdf", width = 12, height = 6)
+ggsave("../figures/FigS10.eps", width = 12, height = 6)
 
 
 
@@ -1775,7 +1838,9 @@ resultstemp <- resultsall %>%
   filter(K == Ktemp) %>%
   select(-K)
 
-resi <- resultstemp %>% filter(n=="n = 500", !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
+resi <- resultstemp %>% filter(n=="n = 500", !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", 
+                                                                 "muw_m_bin_wgini_wosquared", 
+                                                                 "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
 
 resi <- resi %>% mutate(method = case_when(method_all %in% c("muw_wgini_wsquared", "bin_wgini_wsquared") ~ "wsquared_wgini",
                                            method_all %in% c("muw_wgini_wosquared", "bin_wgini_wosquared") ~ "wosquared_wgini",
@@ -1795,7 +1860,8 @@ resi <- resi %>% filter(!(seq %in% c(1:45)))
 
 
 resi2 <- data.frame(
-  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=7), levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
+  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=7), 
+                  levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
   xpos = rep(c(2.75, 7, 10, 13, 16, 19, 22), times=4),
   labels = rep(c("X[no]", "X[two_gr]", "X[thr_gr]", "X[cl_as[1]]", "X[cl_as[2]]", "X[cl_as[3]]", "X[cl_as[4]]"), times=4)
 )
@@ -1836,7 +1902,7 @@ p
 
 # Figure S11:
 
-ggsave("../figures/FigS11.pdf", width = 12, height = 6)
+ggsave("../figures/FigS11.eps", width = 12, height = 6)
 
 
 
@@ -1850,7 +1916,9 @@ resultstemp <- resultsall %>%
   filter(K == Ktemp) %>%
   select(-K)
 
-resi <- resultstemp %>% filter(n=="n = 1000", !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
+resi <- resultstemp %>% filter(n=="n = 1000", !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared",
+                                                                  "muw_m_bin_wgini_wosquared", 
+                                                                  "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
 
 resi <- resi %>% mutate(method = case_when(method_all %in% c("muw_wgini_wsquared", "bin_wgini_wsquared") ~ "wsquared_wgini",
                                            method_all %in% c("muw_wgini_wosquared", "bin_wgini_wosquared") ~ "wosquared_wgini",
@@ -1870,7 +1938,8 @@ resi <- resi %>% filter(!(seq %in% c(1:45)))
 
 
 resi2 <- data.frame(
-  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=7), levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
+  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=7), 
+                  levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
   xpos = rep(c(2.75, 7, 10, 13, 16, 19, 22), times=4),
   labels = rep(c("X[no]", "X[two_gr]", "X[thr_gr]", "X[cl_as[1]]", "X[cl_as[2]]", "X[cl_as[3]]", "X[cl_as[4]]"), times=4)
 )
@@ -1911,7 +1980,7 @@ p
 
 # Figure S12:
 
-ggsave("../figures/FigS12.pdf", width = 12, height = 6)
+ggsave("../figures/FigS12.eps", width = 12, height = 6)
 
 
 
@@ -1926,7 +1995,10 @@ resultstemp <- resultsall %>%
   filter(K == Ktemp) %>%
   select(-K)
 
-resi <- resultstemp %>% filter(n=="n = 2000", !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
+resi <- resultstemp %>% filter(n=="n = 2000", 
+                               !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", 
+                                                   "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", 
+                                                   "muw_m_bin_wogini_wosquared")))
 
 resi <- resi %>% mutate(method = case_when(method_all %in% c("muw_wgini_wsquared", "bin_wgini_wsquared") ~ "wsquared_wgini",
                                            method_all %in% c("muw_wgini_wosquared", "bin_wgini_wosquared") ~ "wosquared_wgini",
@@ -1946,7 +2018,10 @@ resi <- resi %>% filter(!(seq %in% c(1:45)))
 
 
 resi2 <- data.frame(
-  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), each=7), levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini")),
+  method = factor(rep(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", 
+                        "wosquared_wogini"), each=7), 
+                  levels=c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", 
+                           "wosquared_wogini")),
   xpos = rep(c(2.75, 7, 10, 13, 16, 19, 22), times=4),
   labels = rep(c("X[no]", "X[two_gr]", "X[thr_gr]", "X[cl_as[1]]", "X[cl_as[2]]", "X[cl_as[3]]", "X[cl_as[4]]"), times=4)
 )
@@ -1987,7 +2062,7 @@ p
 
 # Figure S13:
 
-ggsave("../figures/FigS13.pdf", width = 12, height = 6)
+ggsave("../figures/FigS13.eps", width = 12, height = 6)
 
 
 
@@ -2003,7 +2078,10 @@ ggsave("../figures/FigS13.pdf", width = 12, height = 6)
 # for all simulated datasets: noise covariates only.
 #######################################################################################################
 
-resi <- resultsall %>% filter(n=="n = 500", !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", "muw_m_bin_wogini_wosquared")))
+resi <- resultsall %>% filter(n=="n = 500", 
+                              !(method_all %in% c("perm", "gini_corr", "muw_m_bin_wgini_wsquared", 
+                                                  "muw_m_bin_wgini_wosquared", "muw_m_bin_wogini_wsquared", 
+                                                  "muw_m_bin_wogini_wosquared")))
 
 resi <- resi %>% mutate(method = case_when(method_all %in% c("muw_wgini_wsquared", "bin_wgini_wsquared") ~ "wsquared_wgini",
                                            method_all %in% c("muw_wgini_wosquared", "bin_wgini_wosquared") ~ "wosquared_wgini",
@@ -2026,7 +2104,7 @@ p <- ggplot(resi, aes(x = factor(seq), y = vim, fill = type)) + facet_wrap(~ K +
   geom_boxplot(position = position_dodge(width = 0.75)) + 
   theme_bw() +
   labs(fill = "VIM type",
-    x = expression(X[no]),
+       x = expression(X[no]),
        y = "VIM values") +
   scale_fill_manual(values=colors, labels = c("discriminatory", "multi-class")) +
   theme(legend.position = "bottom",
@@ -2042,7 +2120,7 @@ p
 
 # Figure S14:
 
-ggsave("../figures/FigS14.pdf", width = 12, height = 7)
+ggsave("../figures/FigS14.eps", width = 12, height = 7)
 
 
 
@@ -2133,7 +2211,8 @@ resi <- resi %>% filter(!(seq %in% 1:45))
 resi$K <- factor(paste0("C = ", resi$K), levels=c("C = 4", "C = 6", "C = 10"))
 
 resi2 <- data.frame(
-  K = factor(rep(c("C = 4", "C = 6", "C = 10"), times=c(5, 6, 7)), levels=c("C = 4", "C = 6", "C = 10")),
+  K = factor(rep(c("C = 4", "C = 6", "C = 10"), times=c(5, 6, 7)), 
+             levels=c("C = 4", "C = 6", "C = 10")),
   xpos = c(2.75, 7, 10, 13, 16, 2.75, 7, 10, 13, 16, 19, 2.75, 7, 10, 13, 16, 19, 22),
   labels = c("X[no]", "X[two_gr]", "X[cl_as[1]]", "X[cl_as[2]]", "X[cl_as[3]]",
              "X[no]", "X[two_gr]", "X[thr_gr]", "X[cl_as[1]]", "X[cl_as[2]]", "X[cl_as[3]]",
@@ -2179,7 +2258,7 @@ grid_plot <- arrangeGrob(p1, p2, ncol = 2)  # `nullGrob()` is an empty plot
 
 # Figure 1:
 
-ggsave("../figures/Fig1.pdf", grid_plot, width = 12, height = 10)
+ggsave("../figures/Fig1.eps", grid_plot, width = 12, height = 10)
 
 
 
@@ -2454,17 +2533,17 @@ xseq <- seq(-4, 7, length.out = 200)
 
 
 plotdata <- data.frame(c=factor(rep(1:10, each=200)),
-  x=rep(xseq, 10),
-  y=c(dnorm(xseq, mean=0, sd=1), 
-      dnorm(xseq, mean=0, sd=1) + dtemp,
-      dnorm(xseq, mean=0, sd=1) + 2*dtemp,
-      dnorm(xseq, mean=0, sd=1) + 3*dtemp,
-      dnorm(xseq, mean=0, sd=1) + 4*dtemp,
-      dnorm(xseq, mean=1.5, sd=1), 
-      dnorm(xseq, mean=1.5, sd=1) + dtemp,
-      dnorm(xseq, mean=1.5, sd=1) + 2*dtemp,
-      dnorm(xseq, mean=1.5, sd=1) + 3*dtemp,
-      dnorm(xseq, mean=1.5, sd=1) + 4*dtemp))
+                       x=rep(xseq, 10),
+                       y=c(dnorm(xseq, mean=0, sd=1), 
+                           dnorm(xseq, mean=0, sd=1) + dtemp,
+                           dnorm(xseq, mean=0, sd=1) + 2*dtemp,
+                           dnorm(xseq, mean=0, sd=1) + 3*dtemp,
+                           dnorm(xseq, mean=0, sd=1) + 4*dtemp,
+                           dnorm(xseq, mean=1.5, sd=1), 
+                           dnorm(xseq, mean=1.5, sd=1) + dtemp,
+                           dnorm(xseq, mean=1.5, sd=1) + 2*dtemp,
+                           dnorm(xseq, mean=1.5, sd=1) + 3*dtemp,
+                           dnorm(xseq, mean=1.5, sd=1) + 4*dtemp))
 
 p1 <- ggplot(data=plotdata, aes(x=x, y=y, color=c)) + theme_bw() + 
   geom_line() +
@@ -2657,4 +2736,4 @@ combined_plot <- plot_grid(
 
 # Figure S1:
 
-ggsave("../figures/FigS1.pdf", width=10*0.8, height=13*0.8)
+ggsave("../figures/FigS1.eps", width=10*0.8, height=13*0.8)

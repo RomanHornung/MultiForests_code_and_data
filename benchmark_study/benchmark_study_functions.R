@@ -41,10 +41,10 @@ evaluatesetting <- function(iter, mywd) {
   
   load(paste0("./data/datasets/", dataset))
   
-    if (nrow(dataset) <= 5000)
-  num_trees <- 5000
+  if (nrow(dataset) <= 5000)
+    num_trees <- 5000
   else
-  num_trees <- 1000
+    num_trees <- 1000
   
   
   # Make CV division:
@@ -64,31 +64,36 @@ evaluatesetting <- function(iter, mywd) {
     
     if(method=="rf") {
       
-      res[[i]] <- trainandpredict(datatrain, datatest, trainfun=trainRandomForest, predictfun=predictRandomForest, num_trees=num_trees)
+      res[[i]] <- trainandpredict(datatrain, datatest, trainfun=trainRandomForest, 
+                                  predictfun=predictRandomForest, num_trees=num_trees)
       
     }
     
     if(method=="muwf_wgini_wsquared") {
       
-      res[[i]] <- trainandpredict(datatrain, datatest, trainfun=trainMuwfWginiWsquared, predictfun=predictMuwfWginiWsquared, num_trees=num_trees)
-
+      res[[i]] <- trainandpredict(datatrain, datatest, trainfun=trainMuwfWginiWsquared, 
+                                  predictfun=predictMuwfWginiWsquared, num_trees=num_trees)
+      
     }
     
     if(method=="muwf_wogini_wsquared") {
       
-      res[[i]] <- trainandpredict(datatrain, datatest, trainfun=trainMuwfWoginiWsquared, predictfun=predictMuwfWoginiWsquared, num_trees=num_trees)
+      res[[i]] <- trainandpredict(datatrain, datatest, trainfun=trainMuwfWoginiWsquared, 
+                                  predictfun=predictMuwfWoginiWsquared, num_trees=num_trees)
       
     }
     
     if(method=="muwf_wgini_wosquared") {
       
-      res[[i]] <- trainandpredict(datatrain, datatest, trainfun=trainMuwfWginiWosquared, predictfun=predictMuwfWginiWosquared, num_trees=num_trees)
+      res[[i]] <- trainandpredict(datatrain, datatest, trainfun=trainMuwfWginiWosquared, 
+                                  predictfun=predictMuwfWginiWosquared, num_trees=num_trees)
       
     }
     
     if(method=="muwf_wogini_wosquared") {
       
-      res[[i]] <- trainandpredict(datatrain, datatest, trainfun=trainMuwfWoginiWosquared, predictfun=predictMuwfWoginiWosquared, num_trees=num_trees)
+      res[[i]] <- trainandpredict(datatrain, datatest, trainfun=trainMuwfWoginiWosquared, 
+                                  predictfun=predictMuwfWoginiWosquared, num_trees=num_trees)
       
     }
     
@@ -168,7 +173,9 @@ trainRandomForest <- function(dependent.variable.name, data, num_trees) {
   
   require("ranger")
   
-  model <- ranger::ranger(dependent.variable.name = "ytarget", num.trees=num_trees, data=data, importance="none", respect.unordered.factors="order", replace = FALSE, sample.fraction = 0.7, probability=TRUE, min.node.size=5, num.threads=1)
+  model <- ranger::ranger(dependent.variable.name = "ytarget", num.trees=num_trees, data=data, 
+                          importance="none", respect.unordered.factors="order", replace = FALSE,
+                          sample.fraction = 0.7, probability=TRUE, min.node.size=5, num.threads=1)
   
   return(model)
   
@@ -206,7 +213,8 @@ predictRandomForest <- function(model, dependent.variable.name, newdata) {
   if (!all(levels(newdata$ytarget) %in% colnames(probpreds))) {
     probpredsnew <- matrix(nrow=nrow(probpreds), ncol=length(levels(newdata$ytarget)), data=0)
     indsfill <- which(levels(newdata$ytarget) %in% colnames(probpreds))
-    reorderind <- as.numeric(factor(levels(newdata$ytarget)[levels(newdata$ytarget) %in% colnames(probpreds)], levels=colnames(probpreds)))
+    reorderind <- as.numeric(factor(levels(newdata$ytarget)[levels(newdata$ytarget) %in% colnames(probpreds)], 
+                                    levels=colnames(probpreds)))
     probpreds <- probpreds[,reorderind]
     probpredsnew[,indsfill] <- probpreds
     probpreds <- probpredsnew
@@ -214,7 +222,8 @@ predictRandomForest <- function(model, dependent.variable.name, newdata) {
   }
   
   # Obtain class predictions:
-  classpreds <- factor(levels(newdata[,dependent.variable.name])[apply(probpreds, 1, nnet::which.is.max)], levels=levels(newdata[,dependent.variable.name]))
+  classpreds <- factor(levels(newdata[,dependent.variable.name])[apply(probpreds, 1, nnet::which.is.max)], 
+                       levels=levels(newdata[,dependent.variable.name]))
   
   return(list(probpreds=probpreds, classpreds=classpreds))
   
@@ -240,7 +249,10 @@ trainMuwfWginiWsquared <- function(dependent.variable.name, data, num_trees) {
   
   require("diversityForestA")
   
-  model <- diversityForestA::multifor(dependent.variable.name = "ytarget", data=data, importance="none", npervar = 5, num.trees=num_trees, replace = FALSE, sample.fraction = 0.7, probability=TRUE, min.node.size=5, num.threads=1)
+  model <- diversityForestA::multifor(dependent.variable.name = "ytarget", data=data, 
+                                      importance="none", npervar = 5, num.trees=num_trees, 
+                                      replace = FALSE, sample.fraction = 0.7, probability=TRUE,
+                                      min.node.size=5, num.threads=1)
   
   return(model)
   
@@ -276,7 +288,8 @@ predictMuwfWginiWsquared <- function(model, dependent.variable.name, newdata) {
   if (!all(levels(newdata$ytarget) %in% colnames(probpreds))) {
     probpredsnew <- matrix(nrow=nrow(probpreds), ncol=length(levels(newdata$ytarget)), data=0)
     indsfill <- which(levels(newdata$ytarget) %in% colnames(probpreds))
-    reorderind <- as.numeric(factor(levels(newdata$ytarget)[levels(newdata$ytarget) %in% colnames(probpreds)], levels=colnames(probpreds)))
+    reorderind <- as.numeric(factor(levels(newdata$ytarget)[levels(newdata$ytarget) %in% colnames(probpreds)], 
+                                    levels=colnames(probpreds)))
     probpreds <- probpreds[,reorderind]
     probpredsnew[,indsfill] <- probpreds
     probpreds <- probpredsnew
@@ -284,7 +297,8 @@ predictMuwfWginiWsquared <- function(model, dependent.variable.name, newdata) {
   }
   
   # Obtain class predictions:
-  classpreds <- factor(levels(newdata[,dependent.variable.name])[apply(probpreds, 1, nnet::which.is.max)], levels=levels(newdata[,dependent.variable.name]))
+  classpreds <- factor(levels(newdata[,dependent.variable.name])[apply(probpreds, 1, nnet::which.is.max)], 
+                       levels=levels(newdata[,dependent.variable.name]))
   
   return(list(probpreds=probpreds, classpreds=classpreds))
   
@@ -311,7 +325,10 @@ trainMuwfWoginiWsquared <- function(dependent.variable.name, data, num_trees) {
   
   require("diversityForestB")
   
-  model <- diversityForestB::multifor(dependent.variable.name = "ytarget", data=data, importance="none", npervar = 5, num.trees=num_trees, replace = FALSE, sample.fraction = 0.7, probability=TRUE, min.node.size=5, num.threads=1)
+  model <- diversityForestB::multifor(dependent.variable.name = "ytarget", data=data, 
+                                      importance="none", npervar = 5, num.trees=num_trees, 
+                                      replace = FALSE, sample.fraction = 0.7, probability=TRUE, 
+                                      min.node.size=5, num.threads=1)
   
   return(model)
   
@@ -346,7 +363,8 @@ predictMuwfWoginiWsquared <- function(model, dependent.variable.name, newdata) {
   if (!all(levels(newdata$ytarget) %in% colnames(probpreds))) {
     probpredsnew <- matrix(nrow=nrow(probpreds), ncol=length(levels(newdata$ytarget)), data=0)
     indsfill <- which(levels(newdata$ytarget) %in% colnames(probpreds))
-    reorderind <- as.numeric(factor(levels(newdata$ytarget)[levels(newdata$ytarget) %in% colnames(probpreds)], levels=colnames(probpreds)))
+    reorderind <- as.numeric(factor(levels(newdata$ytarget)[levels(newdata$ytarget) %in% colnames(probpreds)], 
+                                    levels=colnames(probpreds)))
     probpreds <- probpreds[,reorderind]
     probpredsnew[,indsfill] <- probpreds
     probpreds <- probpredsnew
@@ -354,7 +372,8 @@ predictMuwfWoginiWsquared <- function(model, dependent.variable.name, newdata) {
   }
   
   # Obtain class predictions:
-  classpreds <- factor(levels(newdata[,dependent.variable.name])[apply(probpreds, 1, nnet::which.is.max)], levels=levels(newdata[,dependent.variable.name]))
+  classpreds <- factor(levels(newdata[,dependent.variable.name])[apply(probpreds, 1, nnet::which.is.max)], 
+                       levels=levels(newdata[,dependent.variable.name]))
   
   return(list(probpreds=probpreds, classpreds=classpreds))
   
@@ -381,7 +400,10 @@ trainMuwfWginiWosquared <- function(dependent.variable.name, data, num_trees) {
   
   require("diversityForestC")
   
-  model <- diversityForestC::multifor(dependent.variable.name = "ytarget", data=data, importance="none", npervar = 5, num.trees=num_trees, replace = FALSE, sample.fraction = 0.7, probability=TRUE, min.node.size=5, num.threads=1)
+  model <- diversityForestC::multifor(dependent.variable.name = "ytarget", data=data, 
+                                      importance="none", npervar = 5, num.trees=num_trees, 
+                                      replace = FALSE, sample.fraction = 0.7, probability=TRUE, 
+                                      min.node.size=5, num.threads=1)
   
   return(model)
   
@@ -416,7 +438,8 @@ predictMuwfWginiWosquared <- function(model, dependent.variable.name, newdata) {
   if (!all(levels(newdata$ytarget) %in% colnames(probpreds))) {
     probpredsnew <- matrix(nrow=nrow(probpreds), ncol=length(levels(newdata$ytarget)), data=0)
     indsfill <- which(levels(newdata$ytarget) %in% colnames(probpreds))
-    reorderind <- as.numeric(factor(levels(newdata$ytarget)[levels(newdata$ytarget) %in% colnames(probpreds)], levels=colnames(probpreds)))
+    reorderind <- as.numeric(factor(levels(newdata$ytarget)[levels(newdata$ytarget) %in% colnames(probpreds)], 
+                                    levels=colnames(probpreds)))
     probpreds <- probpreds[,reorderind]
     probpredsnew[,indsfill] <- probpreds
     probpreds <- probpredsnew
@@ -424,7 +447,8 @@ predictMuwfWginiWosquared <- function(model, dependent.variable.name, newdata) {
   }
   
   # Obtain class predictions:
-  classpreds <- factor(levels(newdata[,dependent.variable.name])[apply(probpreds, 1, nnet::which.is.max)], levels=levels(newdata[,dependent.variable.name]))
+  classpreds <- factor(levels(newdata[,dependent.variable.name])[apply(probpreds, 1, nnet::which.is.max)], 
+                       levels=levels(newdata[,dependent.variable.name]))
   
   return(list(probpreds=probpreds, classpreds=classpreds))
   
@@ -451,7 +475,10 @@ trainMuwfWoginiWosquared <- function(dependent.variable.name, data, num_trees) {
   
   require("diversityForestD")
   
-  model <- diversityForestD::multifor(dependent.variable.name = "ytarget", data=data, importance="none", npervar = 5, num.trees=num_trees, replace = FALSE, sample.fraction = 0.7, probability=TRUE, min.node.size=5, num.threads=1)
+  model <- diversityForestD::multifor(dependent.variable.name = "ytarget", data=data, 
+                                      importance="none", npervar = 5, num.trees=num_trees, 
+                                      replace = FALSE, sample.fraction = 0.7, probability=TRUE,
+                                      min.node.size=5, num.threads=1)
   
   return(model)
   
@@ -486,7 +513,8 @@ predictMuwfWoginiWosquared <- function(model, dependent.variable.name, newdata) 
   if (!all(levels(newdata$ytarget) %in% colnames(probpreds))) {
     probpredsnew <- matrix(nrow=nrow(probpreds), ncol=length(levels(newdata$ytarget)), data=0)
     indsfill <- which(levels(newdata$ytarget) %in% colnames(probpreds))
-    reorderind <- as.numeric(factor(levels(newdata$ytarget)[levels(newdata$ytarget) %in% colnames(probpreds)], levels=colnames(probpreds)))
+    reorderind <- as.numeric(factor(levels(newdata$ytarget)[levels(newdata$ytarget) %in% colnames(probpreds)], 
+                                    levels=colnames(probpreds)))
     probpreds <- probpreds[,reorderind]
     probpredsnew[,indsfill] <- probpreds
     probpreds <- probpredsnew
@@ -494,7 +522,8 @@ predictMuwfWoginiWosquared <- function(model, dependent.variable.name, newdata) 
   }
   
   # Obtain class predictions:
-  classpreds <- factor(levels(newdata[,dependent.variable.name])[apply(probpreds, 1, nnet::which.is.max)], levels=levels(newdata[,dependent.variable.name]))
+  classpreds <- factor(levels(newdata[,dependent.variable.name])[apply(probpreds, 1, nnet::which.is.max)], 
+                       levels=levels(newdata[,dependent.variable.name]))
   
   return(list(probpreds=probpreds, classpreds=classpreds))
   
@@ -521,7 +550,8 @@ predictMuwfWoginiWosquared <- function(model, dependent.variable.name, newdata) 
 makeCVdiv <- function(data, yname="y", ncv=5) {
   
   cvid <- rep(NA, length = nrow(data))
-  for(i in levels(data[, yname])) cvid[data[, yname] == i] <- sample(rep(1:ncv, length = sum(data[, yname] == i)))
+  for(i in levels(data[, yname])) cvid[data[, yname] == i] <- 
+      sample(rep(1:ncv, length = sum(data[, yname] == i)))
   
   cvid
   
@@ -566,7 +596,7 @@ measureAUNU <- function (probabilities, truth)
 
 measureAUNP <- function (probabilities, truth)
 {
-#### CHANGED, ORIGINAL: sum(vapply(levels(truth), function(lvl) mean(truth == lvl), FUN.VALUE = NA_real_) * onevrestauc(prob, truth))
+  #### CHANGED, ORIGINAL: sum(vapply(levels(truth), function(lvl) mean(truth == lvl), FUN.VALUE = NA_real_) * onevrestauc(prob, truth))
   sum(vapply(unique(as.character(truth)), function(lvl) mean(truth == lvl), FUN.VALUE = NA_real_) * onevrestauc(probabilities, truth))
 }
 

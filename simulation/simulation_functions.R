@@ -31,7 +31,7 @@ evaluatesetting <- function(iter, mywd) {
   it <- scenariogrid$itind[iter]
   settingid <- scenariogrid$settingid[iter]
   seed <- scenariogrid$seed[iter]
-
+  
   # Simulate dataset:
   
   set.seed(seed)
@@ -41,31 +41,43 @@ evaluatesetting <- function(iter, mywd) {
   # Apply the methods:
   
   set.seed(seed)
-  perm <- ranger::ranger(dependent.variable.name = "cl", data=dataset, importance="permutation", num.trees=5000, replace = FALSE, sample.fraction = 0.7, probability=TRUE, min.node.size=5, num.threads=1)$variable.importance
+  perm <- ranger::ranger(dependent.variable.name = "cl", data=dataset, importance="permutation", 
+                         num.trees=5000, replace = FALSE, sample.fraction = 0.7, probability=TRUE, 
+                         min.node.size=5, num.threads=1)$variable.importance
   
   set.seed(seed)
-  gini_corr <- ranger::ranger(dependent.variable.name = "cl", data=dataset, importance="impurity_corrected", num.trees=5000, replace = FALSE, sample.fraction = 0.7, probability=TRUE, min.node.size=5, num.threads=1)$variable.importance
+  gini_corr <- ranger::ranger(dependent.variable.name = "cl", data=dataset, importance="impurity_corrected",
+                              num.trees=5000, replace = FALSE, sample.fraction = 0.7,
+                              probability=TRUE, min.node.size=5, num.threads=1)$variable.importance
   
   set.seed(seed)
-  muobj <- diversityForestA::multifor(dependent.variable.name = "cl", data=dataset, importance="both", npervar = 5, num.trees=5000, replace = FALSE, sample.fraction = 0.7, probability=TRUE, min.node.size=5, num.threads=1)
+  muobj <- diversityForestA::multifor(dependent.variable.name = "cl", data=dataset, importance="both", 
+                                      npervar = 5, num.trees=5000, replace = FALSE, sample.fraction = 0.7,
+                                      probability=TRUE, min.node.size=5, num.threads=1)
   muw_wgini_wsquared <- muobj$var.imp.multiclass
   bin_wgini_wsquared <- muobj$var.imp.binary
   rm(muobj); gc()
   
   set.seed(seed)
-  muobj <- diversityForestB::multifor(dependent.variable.name = "cl", data=dataset, importance="both", npervar = 5, num.trees=5000, replace = FALSE, sample.fraction = 0.7, probability=TRUE, min.node.size=5, num.threads=1)
+  muobj <- diversityForestB::multifor(dependent.variable.name = "cl", data=dataset, importance="both", 
+                                      npervar = 5, num.trees=5000, replace = FALSE, sample.fraction = 0.7,
+                                      probability=TRUE, min.node.size=5, num.threads=1)
   muw_wogini_wsquared <- muobj$var.imp.multiclass
   bin_wogini_wsquared <- muobj$var.imp.binary
   rm(muobj); gc()
   
   set.seed(seed)
-  muobj <- diversityForestC::multifor(dependent.variable.name = "cl", data=dataset, importance="both", npervar = 5, num.trees=5000, replace = FALSE, sample.fraction = 0.7, probability=TRUE, min.node.size=5, num.threads=1)
+  muobj <- diversityForestC::multifor(dependent.variable.name = "cl", data=dataset, importance="both", 
+                                      npervar = 5, num.trees=5000, replace = FALSE, sample.fraction = 0.7, 
+                                      probability=TRUE, min.node.size=5, num.threads=1)
   muw_wgini_wosquared <- muobj$var.imp.multiclass
   bin_wgini_wosquared <- muobj$var.imp.binary
   rm(muobj); gc()
   
   set.seed(seed)
-  muobj <- diversityForestD::multifor(dependent.variable.name = "cl", data=dataset, importance="both", npervar = 5, num.trees=5000, replace = FALSE, sample.fraction = 0.7, probability=TRUE, min.node.size=5, num.threads=1)
+  muobj <- diversityForestD::multifor(dependent.variable.name = "cl", data=dataset, importance="both",
+                                      npervar = 5, num.trees=5000, replace = FALSE, sample.fraction = 0.7, 
+                                      probability=TRUE, min.node.size=5, num.threads=1)
   muw_wogini_wosquared <- muobj$var.imp.multiclass
   bin_wogini_wosquared <- muobj$var.imp.binary
   rm(muobj); gc()
@@ -159,15 +171,15 @@ simdataK4 <- function(n=500) {
   # different outcome classes:
   
   means_bin <- c(rep(0, K/2), rep(1.5, K/2))
-
+  
   tempval <- 1
   means_1_cl <- c(rep(0, 3), tempval)
-
+  
   means_2_cl <- c(rep(0, 2), tempval, 2*tempval)
-
+  
   tempval <- 0.75
   means_3_cl <- c(0, tempval, 2*tempval, 3*tempval)
-
+  
   
   
   # Simulate the variable values:
@@ -346,7 +358,7 @@ simdataK10 <- function(n=500) {
     ncls[1:(n - sum_ncls)] <- ncls[1:(n - sum_ncls)] + 1
   
   cl <- factor(rep(1:K, times=sample(ncls))) 
-
+  
   
   means_bin <- c(rep(0, K/2), rep(1.5, K/2))
   
@@ -370,7 +382,7 @@ simdataK10 <- function(n=500) {
   
   nblock <- 3
   
-
+  
   
   
   X_bin <- matrix(nrow=n, ncol=nblock)
@@ -392,7 +404,7 @@ simdataK10 <- function(n=500) {
   
   
   X_1_cl <- matrix(nrow=n, ncol=nblock)
-    
+  
   for(j in 1:nblock) {
     for(i in 1:K) {
       X_1_cl[cl==i,j] <- rnorm(sum(cl==i), mean=means_1_cl[i], sd=1)

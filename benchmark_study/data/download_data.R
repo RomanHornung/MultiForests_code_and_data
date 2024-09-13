@@ -60,7 +60,9 @@ clas = clas[logic,]
 print(paste("  Number of datasets after removing the redundacies of datasets's IDs :", dim(clas)[1]), quote = FALSE)
 
 # Friedman-, volcanoes- und trX-Datasets : 393 datasets
-clas = clas[substr(clas$name,1,9) != "volcanoes" & substr(clas$name,1,4) != "fri_" & substr(clas$name,1,3) != "tr1" & substr(clas$name,1,3) != "tr2" & substr(clas$name,1,3) != "tr3" & substr(clas$name,1,3) != "tr4", ]
+clas = clas[substr(clas$name,1,9) != "volcanoes" & substr(clas$name,1,4) != "fri_" & 
+              substr(clas$name,1,3) != "tr1" & substr(clas$name,1,3) != "tr2" & substr(clas$name,1,3) != "tr3" & 
+              substr(clas$name,1,3) != "tr4", ]
 print(paste("  Number of datasets after removing the obviously simulated datasets :", dim(clas)[1]), quote = FALSE)
 print("  Datasets removed : Friedman, volcanoes, TrX-Datasets", quote = FALSE)
 
@@ -87,7 +89,8 @@ indexDuplicate.notuseful = which(diff.categorical(doublon$name)==0)
 task.id.notuseful = doublon$task.id[indexDuplicate.notuseful]
 indexclas.notuseful = which(clas$task.id %in% task.id.notuseful)
 clas = clas[-indexclas.notuseful,]
-print(paste("  Number of datasets after removing the redundancies in dataset's names:", dim(clas)[1]), quote = FALSE)
+print(paste("  Number of datasets after removing the redundancies in dataset's names:", 
+            dim(clas)[1]), quote = FALSE)
 
 # Ordering according to size (n*p)
 clas = clas[order(clas$number.of.features * clas$number.of.instances), ]
@@ -132,7 +135,9 @@ datatable <- rbind(part1, part2)
 # There are 49 "timing-attack" datasets. Exclude all of them except one.
 # I decided for the one that appeared first in a Google search of "timing-attack-dataset openml":
 
-datatable <- datatable[-setdiff(grep("timing-attack-dataset", datatable$Name), grep("timing-attack-dataset-15-micro-seconds-delay-2022-09-18", datatable$Name)),]
+datatable <- datatable[-setdiff(grep("timing-attack-dataset", datatable$Name), 
+                                grep("timing-attack-dataset-15-micro-seconds-delay-2022-09-18", 
+                                     datatable$Name)),]
 
 
 
@@ -230,7 +235,7 @@ for(i in seq(along=datasetsrel)) {
   save(dataset, file=paste0("./datasets/", datasetsrel[i], "_dataid_NA.Rda"))
   
   cat(paste0("Iteration: ", i, " of ", length(datasetsrel)), "\n")
-
+  
 }
 
 
@@ -734,7 +739,7 @@ load("./datasets/thyroid-new_dataid_40682.Rda")
 dim(dataset)
 head(dataset)
 
-                       
+
 
 
 
@@ -1609,7 +1614,9 @@ sapply(dataset, class)
 
 table(dataset$year_zone)
 
-dataset$year_zone <- factor(as.character(dataset$year_zone), levels = paste0(rep(c(0,1,2,6,7,8,9), each=3), rep(c("f", "m", "c"), times=3)), ordered = TRUE)
+dataset$year_zone <- factor(as.character(dataset$year_zone), levels = paste0(rep(c(0,1,2,6,7,8,9), each=3), 
+                                                                             rep(c("f", "m", "c"), times=3)), 
+                            ordered = TRUE)
 
 factortemp <- dataset$year
 head(factortemp)

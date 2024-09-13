@@ -35,7 +35,8 @@ results$method[results$method=="muwf_wogini_wsquared"] <- "MuwF_WOgini_squ"
 results$method[results$method=="muwf_wogini_wosquared"] <- "MuwF_WOgini_WOsqu"
 results$method[results$method=="rf"] <- "RF"
 
-results$method <- factor(results$method, levels=c("MuwF_gini_squ", "MuwF_gini_WOsqu", "MuwF_WOgini_squ", "MuwF_WOgini_WOsqu", "RF"))
+results$method <- factor(results$method, levels=c("MuwF_gini_squ", "MuwF_gini_WOsqu", 
+                                                  "MuwF_WOgini_squ", "MuwF_WOgini_WOsqu", "RF"))
 
 sort(tapply(results$acc, results$method, mean))
 sort(tapply(results$acc, results$method, median))
@@ -110,17 +111,17 @@ summary_df <- resultssum %>%
   # Format each metric with median [Q1, Q3]
   mutate(
     acc = paste(format(round(acc_median, 4), nsmall = 4),
-                        " [", format(round(acc_Q1, 4), nsmall = 4),
-                        ", ", format(round(acc_Q3, 4), nsmall = 4), "]", sep = ""),
+                " [", format(round(acc_Q1, 4), nsmall = 4),
+                ", ", format(round(acc_Q3, 4), nsmall = 4), "]", sep = ""),
     brier = paste(format(round(brier_median, 4), nsmall = 4),
-                          " [", format(round(brier_Q1, 4), nsmall = 4),
-                          ", ", format(round(brier_Q3, 4), nsmall = 4), "]", sep = ""),
+                  " [", format(round(brier_Q1, 4), nsmall = 4),
+                  ", ", format(round(brier_Q3, 4), nsmall = 4), "]", sep = ""),
     aunp = paste(format(round(aunp_median, 4), nsmall = 4),
-                         " [", format(round(aunp_Q1, 4), nsmall = 4),
-                         ", ", format(round(aunp_Q3, 4), nsmall = 4), "]", sep = ""),
+                 " [", format(round(aunp_Q1, 4), nsmall = 4),
+                 ", ", format(round(aunp_Q3, 4), nsmall = 4), "]", sep = ""),
     aunu = paste(format(round(aunu_median, 4), nsmall = 4),
-                         " [", format(round(aunu_Q1, 4), nsmall = 4),
-                         ", ", format(round(aunu_Q3, 4), nsmall = 4), "]", sep = "")
+                 " [", format(round(aunu_Q1, 4), nsmall = 4),
+                 ", ", format(round(aunu_Q3, 4), nsmall = 4), "]", sep = "")
   ) %>%
   # Select only the columns needed for the final summary
   select(method, aunu, aunp, brier, acc) %>%
@@ -138,7 +139,8 @@ print(summary_df)
 library("xtable")
 
 # Convert your dataframe to a LaTeX table with xtable
-latex_table <- xtable(summary_df, caption = "Performances of the methods summarised across the 121 datasets", label = "tab:benchmark_summary")
+latex_table <- xtable(summary_df, caption = "Performances of the methods summarised across the 121 datasets", 
+                      label = "tab:benchmark_summary")
 
 # Table 2:
 
@@ -158,9 +160,9 @@ print(latex_table, type = "latex", file = "../tables/Tab2.tex", include.rownames
 library("rstatix")
 
 paunus <- c(wilcox.test(resultssum$aunu[resultssum$method=="RF"], resultssum$aunu[resultssum$method=="MuwF_gini_squ"], paired=TRUE)$p.value,
-           wilcox.test(resultssum$aunu[resultssum$method=="RF"], resultssum$aunu[resultssum$method=="MuwF_gini_WOsqu"], paired=TRUE)$p.value,
-           wilcox.test(resultssum$aunu[resultssum$method=="RF"], resultssum$aunu[resultssum$method=="MuwF_WOgini_squ"], paired=TRUE)$p.value,
-           wilcox.test(resultssum$aunu[resultssum$method=="RF"], resultssum$aunu[resultssum$method=="MuwF_WOgini_WOsqu"], paired=TRUE)$p.value)
+            wilcox.test(resultssum$aunu[resultssum$method=="RF"], resultssum$aunu[resultssum$method=="MuwF_gini_WOsqu"], paired=TRUE)$p.value,
+            wilcox.test(resultssum$aunu[resultssum$method=="RF"], resultssum$aunu[resultssum$method=="MuwF_WOgini_squ"], paired=TRUE)$p.value,
+            wilcox.test(resultssum$aunu[resultssum$method=="RF"], resultssum$aunu[resultssum$method=="MuwF_WOgini_WOsqu"], paired=TRUE)$p.value)
 
 raunus <- rep(NA, 4)
 datatemp <- resultssum[resultssum$method %in% c("RF", "MuwF_gini_squ"),]
@@ -209,9 +211,9 @@ names(raunps) <- c("MuwF_gini_squ", "MuwF_gini_WOsqu", "MuwF_WOgini_squ", "MuwF_
 
 
 paccs <- c(wilcox.test(resultssum$acc[resultssum$method=="RF"], resultssum$acc[resultssum$method=="MuwF_gini_squ"], paired=TRUE)$p.value,
-            wilcox.test(resultssum$acc[resultssum$method=="RF"], resultssum$acc[resultssum$method=="MuwF_gini_WOsqu"], paired=TRUE)$p.value,
-            wilcox.test(resultssum$acc[resultssum$method=="RF"], resultssum$acc[resultssum$method=="MuwF_WOgini_squ"], paired=TRUE)$p.value,
-            wilcox.test(resultssum$acc[resultssum$method=="RF"], resultssum$acc[resultssum$method=="MuwF_WOgini_WOsqu"], paired=TRUE)$p.value)
+           wilcox.test(resultssum$acc[resultssum$method=="RF"], resultssum$acc[resultssum$method=="MuwF_gini_WOsqu"], paired=TRUE)$p.value,
+           wilcox.test(resultssum$acc[resultssum$method=="RF"], resultssum$acc[resultssum$method=="MuwF_WOgini_squ"], paired=TRUE)$p.value,
+           wilcox.test(resultssum$acc[resultssum$method=="RF"], resultssum$acc[resultssum$method=="MuwF_WOgini_WOsqu"], paired=TRUE)$p.value)
 
 raccs <- rep(NA, 4)
 datatemp <- resultssum[resultssum$method %in% c("RF", "MuwF_gini_squ"),]
@@ -236,9 +238,9 @@ names(raccs) <- c("MuwF_gini_squ", "MuwF_gini_WOsqu", "MuwF_WOgini_squ", "MuwF_W
 
 
 pbriers <- c(wilcox.test(resultssum$brier[resultssum$method=="RF"], resultssum$brier[resultssum$method=="MuwF_gini_squ"], paired=TRUE)$p.value,
-           wilcox.test(resultssum$brier[resultssum$method=="RF"], resultssum$brier[resultssum$method=="MuwF_gini_WOsqu"], paired=TRUE)$p.value,
-           wilcox.test(resultssum$brier[resultssum$method=="RF"], resultssum$brier[resultssum$method=="MuwF_WOgini_squ"], paired=TRUE)$p.value,
-           wilcox.test(resultssum$brier[resultssum$method=="RF"], resultssum$brier[resultssum$method=="MuwF_WOgini_WOsqu"], paired=TRUE)$p.value)
+             wilcox.test(resultssum$brier[resultssum$method=="RF"], resultssum$brier[resultssum$method=="MuwF_gini_WOsqu"], paired=TRUE)$p.value,
+             wilcox.test(resultssum$brier[resultssum$method=="RF"], resultssum$brier[resultssum$method=="MuwF_WOgini_squ"], paired=TRUE)$p.value,
+             wilcox.test(resultssum$brier[resultssum$method=="RF"], resultssum$brier[resultssum$method=="MuwF_WOgini_WOsqu"], paired=TRUE)$p.value)
 
 rbriers <- rep(NA, 4)
 datatemp <- resultssum[resultssum$method %in% c("RF", "MuwF_gini_squ"),]
@@ -285,14 +287,16 @@ cat(paste(paste(names(raccs), " vs.\\ RF: r =", raccs, sep=""), collapse=", "), 
 cat(paste(paste(names(rbriers), " vs.\\ RF: r =", rbriers, sep=""), collapse=", "), "\n")
 
 restab <- cbind(c("wsquared_wgini", "wosquared_wgini", "wsquared_wogini", "wosquared_wogini"), paste0(raunus, " (", paunusadjust, ")"),
-paste0(raunps, " (", paunpsadjust, ")"),
-paste0(raccs, " (", paccsadjust, ")"),
-paste0(rbriers, " (", pbriersadjust, ")"))
+                paste0(raunps, " (", paunpsadjust, ")"),
+                paste0(raccs, " (", paccsadjust, ")"),
+                paste0(rbriers, " (", pbriersadjust, ")"))
 colnames(restab) <- c("method", "AUNU", "AUNP", "ACC", "Brier")
 
 
 # Convert your dataframe to a LaTeX table with xtable
-latex_table <- xtable(restab, caption = "Results of Wilcoxon tests between the values of the cross-validated metrics obtained with the different MuF versions and conventional RF", label = "tab:wilcox_test")
+latex_table <- xtable(restab, 
+                      caption = "Results of Wilcoxon tests between the values of the cross-validated metrics obtained with the different MuF versions and conventional RF", 
+                      label = "tab:wilcox_test")
 
 
 # Table 3:
@@ -311,8 +315,8 @@ print(latex_table, type = "latex", file = "../tables/Tab3.tex", include.rownames
 #################################################################################
 
 aunuranks <- t(apply(-cbind(resultssum$aunu[resultssum$method=="MuwF_gini_squ"], resultssum$aunu[resultssum$method=="MuwF_gini_WOsqu"], 
-                           resultssum$aunu[resultssum$method=="MuwF_WOgini_squ"], resultssum$aunu[resultssum$method=="MuwF_WOgini_WOsqu"],
-                           resultssum$aunu[resultssum$method=="RF"]), 1, rank))
+                            resultssum$aunu[resultssum$method=="MuwF_WOgini_squ"], resultssum$aunu[resultssum$method=="MuwF_WOgini_WOsqu"],
+                            resultssum$aunu[resultssum$method=="RF"]), 1, rank))
 aunpranks <- t(apply(-cbind(resultssum$aunp[resultssum$method=="MuwF_gini_squ"], resultssum$aunp[resultssum$method=="MuwF_gini_WOsqu"], 
                             resultssum$aunp[resultssum$method=="MuwF_WOgini_squ"], resultssum$aunp[resultssum$method=="MuwF_WOgini_WOsqu"],
                             resultssum$aunp[resultssum$method=="RF"]), 1, rank))
@@ -360,12 +364,12 @@ p <- ggplot(data=ggdata, aes(fill=rank, x=method)) + theme_bw() +
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank()) +
   labs(x="Method", y="Number of datasets")  +
-  geom_bar(position="stack", colour="black") + facet_wrap(~metric) + scale_fill_brewer(name="Rank", palette="Greens") # scale_fill_brewer(name="Rank")
+  geom_bar(position="stack", colour="black") + facet_wrap(~metric) + scale_fill_brewer(name="Rank", palette="Greens")
 p
 
 # Figure 5:
 
-ggsave(file="../figures/Fig5.pdf", width=8, height=8)
+ggsave(file="../figures/Fig5.eps", width=8, height=8)
 
 
 
@@ -487,7 +491,7 @@ ps
 
 # Figure 6:
 
-ggsave("../figures/Fig6.pdf", width=15*0.8, height=5*0.8)
+ggsave("../figures/Fig6.eps", width=15*0.8, height=5*0.8)
 
 
 
@@ -496,7 +500,7 @@ ggsave("../figures/Fig6.pdf", width=15*0.8, height=5*0.8)
 ps <- (p1 | p1.2) / (p2 | p3)
 ps
 
-ggsave("../figures/FigS16.pdf", width=10, height=9)
+ggsave("../figures/FigS16.eps", width=10, height=9)
 
 
 
@@ -702,4 +706,4 @@ combined_plot
 
 # Figure S15:
 
-ggsave("../figures/FigS15.pdf", width=14*0.8, height=10*0.8)
+ggsave("../figures/FigS15.eps", width=14*0.8, height=10*0.8)
