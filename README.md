@@ -1,8 +1,3 @@
----
-output:
-  html_document: default
-  pdf_document: default
----
 # R code and data to the article: Multi forests: Variable importance for multi-class outcomes
 
 Authors: Roman Hornung<sup>1,2,*</sup> and Alexander Hapfelmeier<sup>3</sup>
