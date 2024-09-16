@@ -500,7 +500,7 @@ ggsave("../figures/Fig6.eps", width=15*0.8, height=5*0.8)
 ps <- (p1 | p1.2) / (p2 | p3)
 ps
 
-ggsave("../figures/FigS16.eps", width=10, height=9)
+ggsave("../figures/FigS16.pdf", width=10, height=9)
 
 
 
@@ -706,4 +706,4 @@ combined_plot
 
 # Figure S15:
 
-ggsave("../figures/FigS15.eps", width=14*0.8, height=10*0.8)
+ggsave("../figures/FigS15.pdf", width=14*0.8, height=10*0.8)

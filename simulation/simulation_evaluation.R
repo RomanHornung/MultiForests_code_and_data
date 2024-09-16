@@ -1161,7 +1161,7 @@ p
 
 # Figure S2:
 
-ggsave("../figures/FigS2.eps", width = 12, height = 6)
+ggsave("../figures/FigS2.pdf", width = 12, height = 6)
 
 
 
@@ -1240,7 +1240,7 @@ p
 
 # Figure S3:
 
-ggsave("../figures/FigS3.eps", width = 12, height = 6)
+ggsave("../figures/FigS3.pdf", width = 12, height = 6)
 
 
 
@@ -1319,7 +1319,7 @@ p
 
 # Figure S4:
 
-ggsave("../figures/FigS4.eps", width = 12, height = 6)
+ggsave("../figures/FigS4.pdf", width = 12, height = 6)
 
 
 
@@ -1397,7 +1397,7 @@ p
 
 # Figure S5:
 
-ggsave("../figures/FigS5.eps", width = 12, height = 6)
+ggsave("../figures/FigS5.pdf", width = 12, height = 6)
 
 
 
@@ -1487,7 +1487,7 @@ p
 
 # Figure S6:
 
-ggsave("../figures/FigS6.eps", width = 12, height = 6)
+ggsave("../figures/FigS6.pdf", width = 12, height = 6)
 
 
 
@@ -1570,7 +1570,7 @@ p
 
 # Figure S7:
 
-ggsave("../figures/FigS7.eps", width = 12, height = 6)
+ggsave("../figures/FigS7.pdf", width = 12, height = 6)
 
 
 
@@ -1651,7 +1651,7 @@ p
 
 # Figure S8:
 
-ggsave("../figures/FigS8.eps", width = 12, height = 6)
+ggsave("../figures/FigS8.pdf", width = 12, height = 6)
 
 
 
@@ -1731,7 +1731,7 @@ p
 
 # Figure S9:
 
-ggsave("../figures/FigS9.eps", width = 12, height = 6)
+ggsave("../figures/FigS9.pdf", width = 12, height = 6)
 
 
 
@@ -1823,7 +1823,7 @@ p
 
 # Figure S10:
 
-ggsave("../figures/FigS10.eps", width = 12, height = 6)
+ggsave("../figures/FigS10.pdf", width = 12, height = 6)
 
 
 
@@ -1902,7 +1902,7 @@ p
 
 # Figure S11:
 
-ggsave("../figures/FigS11.eps", width = 12, height = 6)
+ggsave("../figures/FigS11.pdf", width = 12, height = 6)
 
 
 
@@ -1980,7 +1980,7 @@ p
 
 # Figure S12:
 
-ggsave("../figures/FigS12.eps", width = 12, height = 6)
+ggsave("../figures/FigS12.pdf", width = 12, height = 6)
 
 
 
@@ -2062,7 +2062,7 @@ p
 
 # Figure S13:
 
-ggsave("../figures/FigS13.eps", width = 12, height = 6)
+ggsave("../figures/FigS13.pdf", width = 12, height = 6)
 
 
 
@@ -2120,7 +2120,7 @@ p
 
 # Figure S14:
 
-ggsave("../figures/FigS14.eps", width = 12, height = 7)
+ggsave("../figures/FigS14.pdf", width = 12, height = 7)
 
 
 
@@ -2736,4 +2736,4 @@ combined_plot <- plot_grid(
 
 # Figure S1:
 
-ggsave("../figures/FigS1.eps", width=10*0.8, height=13*0.8)
+ggsave("../figures/FigS1.pdf", width=10*0.8, height=13*0.8)
