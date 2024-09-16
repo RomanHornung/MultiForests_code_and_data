@@ -185,11 +185,14 @@ Readers who are not interested in the detailed
     4. `diversityForestD` implements the version of multi forests with variants 
          "Assign Classes" and "Non-Squared" ("wosquared_wogini").
 - **figures**: This subfolder contains all figures shown in the main paper  
-    and in the supplementary material as eps files.
-- **tables**: This subfolder contains all tables shown in the main paper and 
+    and in the supplementary material as eps and pdf files, respectively.
+- **tables**: This subfolder contains the tables shown in the main paper and 
     in the supplementary material as tex files. Note that when the tables were included 
     in the main paper and in the supplementary material, the tex code of these files was 
     slightly modified for visual reasons (without changing the values in the tables).
+    Note further that Table 1 is not included here because this table is related
+    to the design of the simulation study and thus does not show empirical or simulation
+    results.
 
 ---
 
