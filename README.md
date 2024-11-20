@@ -1,4 +1,4 @@
-# R code and data to the article: Multi forests: Variable importance for multi-class outcomes
+# R code and data to the article: Class-focused variable importance via multi forests
 
 Authors: Roman Hornung<sup>1,2,*</sup> and Alexander Hapfelmeier<sup>3</sup>
 
@@ -224,7 +224,7 @@ For the evaluation of the results it is not necessary to re-perform the analyses
   of the `snow` R package in an appropriate location, preferably
   on your path. 
   See http://homepage.divms.uiowa.edu/~luke/R/cluster/cluster.html (last accessed: 
-  12th September 2024) for more details.
+  20th November 2024) for more details.
   Subsequently, you need to create two sh files, each for a different of the
   above R scripts. 
 
